@@ -4,7 +4,9 @@
 
 @section('content')
 <div class="container py-4">
-    <h2 class="mb-4 fw-bold text-dark">📒 Daftar Data Tamu</h2>
+    <h2 class="mb-4 fw-bold text-dark">
+        <i class="bi"></i> Daftar Data Tamu
+    </h2>
 
     {{-- Form Pencarian dan Filter --}}
     <form method="GET" action="{{ route('buku-tamus.index') }}" class="row g-2 mb-4 align-items-end">
@@ -17,10 +19,14 @@
             <input type="month" name="bulan" value="{{ request('bulan') }}" class="form-control">
         </div>
         <div class="col-md-2">
-            <button class="btn btn-primary w-100">🔍 Filter</button>
+            <button class="btn btn-primary w-100">
+                <i class="bi bi-search"></i> Filter
+            </button>
         </div>
         <div class="col-md-2">
-            <a href="{{ route('buku-tamus.index') }}" class="btn btn-secondary w-100">♻️ Reset</a>
+            <a href="{{ route('buku-tamus.index') }}" class="btn btn-secondary w-100">
+                <i class="bi bi-arrow-clockwise"></i> Reset
+            </a>
         </div>
     </form>
 
@@ -54,10 +60,14 @@
                             <td class="text-start">{{ $tamu->keperluan }}</td>
                             <td>{{ $tamu->no_hp }}</td>
                             <td>
-                                <a href="{{ route('buku-tamus.edit', $tamu->id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+                                <a href="{{ route('buku-tamus.edit', ['buku_tamu' => $tamu->id, 'page' => request('page')]) }}" class="btn btn-sm btn-warning">
+                                    <i class="bi bi-pencil-square"></i> Edit
+                                </a>
                                 <form action="{{ route('buku-tamus.destroy', $tamu->id) }}" method="POST" class="d-inline">
                                     @csrf @method('DELETE')
-                                    <button onclick="return confirm('Hapus data ini?')" class="btn btn-sm btn-outline-danger">Hapus</button>
+                                    <button onclick="return confirm('Hapus data ini?')" class="btn btn-sm btn-danger">
+                                        <i class="bi bi-trash"></i> Hapus
+                                    </button>
                                 </form>
                             </td>
                         </tr>

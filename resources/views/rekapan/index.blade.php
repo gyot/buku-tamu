@@ -4,7 +4,9 @@
 
 @section('content')
 <div class="container py-4">
-    <h2 class="mb-4 fw-bold text-dark">📊 Rekapan Tamu</h2>
+    <h2 class="mb-4 fw-bold text-dark">
+        <i class="bi"></i> Rekapan Tamu
+    </h2>
 
     {{-- Filter Form --}}
     <form method="GET" action="{{ route('rekapan.index') }}" class="row g-2 mb-4 align-items-end">
@@ -12,7 +14,7 @@
             <label class="form-label">Jenis Data</label>
             <select name="tipe_data" class="form-select">
                 <option value="buku" {{ $tipe == 'buku' ? 'selected' : '' }}>Buku Tamu</option>
-                <option value="biodata" {{ $tipe == 'biodata' ? 'selected' : '' }}>Biodata Tamu</option>
+                <option value="biodata" {{ $tipe == 'biodata' ? 'selected' : '' }}>Layanan Tamu</option>
             </select>
         </div>
         <div class="col-md-3">
@@ -24,24 +26,45 @@
             <input type="date" name="tanggal_akhir" class="form-control" value="{{ $tanggalAkhir }}">
         </div>
         <div class="col-md-3">
-            <button class="btn btn-primary w-100">🔍 Tampilkan</button>
+            <button class="btn btn-primary w-100">
+                <i class="bi bi-search"></i> Tampilkan
+            </button>
         </div>
     </form>
 
     @if (count($data))
-    {{-- Export Form --}}
-    <form method="POST" action="{{ route('rekapan.export') }}" class="row g-2 mb-4">
-        @csrf
-        <input type="hidden" name="tipe_data" value="{{ $tipe }}">
-        <input type="hidden" name="tanggal_awal" value="{{ $tanggalAwal }}">
-        <input type="hidden" name="tanggal_akhir" value="{{ $tanggalAkhir }}">
-        <div class="col-md-5">
-            <input type="text" name="filename" class="form-control" placeholder="Nama file (opsional)">
+    {{-- Export Section --}}
+    <div class="mb-4" style="max-width: 100%;">
+        <label class="form-label fw-semibold text-dark">Ekspor Laporan (Unduh sebagai file)</label>
+
+        <div class="d-flex flex-wrap gap-2 align-items-end">
+            {{-- Form Excel --}}
+            <form method="POST" action="{{ route('rekapan.export') }}" class="d-flex align-items-end gap-2">
+                @csrf
+                <input type="hidden" name="tipe_data" value="{{ $tipe }}">
+                <input type="hidden" name="tanggal_awal" value="{{ $tanggalAwal }}">
+                <input type="hidden" name="tanggal_akhir" value="{{ $tanggalAkhir }}">
+
+                {{-- <input type="text" name="filename" class="form-control" style="width: 250px;" placeholder="Nama file (opsional)"> --}}
+
+                <button type="submit" class="btn btn-success">
+                    <i class="bi bi-file-earmark-excel-fill me-1"></i> Download Excel
+                </button>
+            </form>
+
+            {{-- Form PDF --}}
+            <form method="POST" action="{{ route('rekapan.exportPdf') }}" target="_blank">
+                @csrf
+                <input type="hidden" name="tipe_data" value="{{ $tipe }}">
+                <input type="hidden" name="tanggal_awal" value="{{ $tanggalAwal }}">
+                <input type="hidden" name="tanggal_akhir" value="{{ $tanggalAkhir }}">
+
+                <button type="submit" class="btn btn-danger">
+                    <i class="bi bi-filetype-pdf me-1"></i> Download PDF
+                </button>
+            </form>
         </div>
-        <div class="col-md-3">
-            <button class="btn btn-success w-100">📥 Ekspor ke Excel</button>
-        </div>
-    </form>
+    </div>
 
     {{-- Tabel --}}
     <div class="card shadow-sm border-0">
@@ -56,7 +79,7 @@
                                 <th>Nama</th>
                                 <th>Instansi/Alamat</th>
                                 <th>Keperluan</th>
-                                <th>No HP</th>
+                                <th>Nomor HP</th>
                                 <th>Permasalahan</th>
                                 <th>Tanggapan</th>
                                 <th>Status</th>
@@ -64,9 +87,9 @@
                                 <th>No</th>
                                 <th>Tanggal</th>
                                 <th>Nama</th>
-                                <th>Instansi</th>
+                                <th>Instansi/Alamat</th>
                                 <th>Keperluan</th>
-                                <th>No HP</th>
+                                <th>Nomor HP</th>
                             @endif
                         </tr>
                     </thead>

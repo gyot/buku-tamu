@@ -32,19 +32,26 @@
             <form method="POST" action="{{ route('login') }}">
                 @csrf
                 <div class="mb-3">
-                    <label for="username" class="form-label">👤 Username</label>
-                    <input type="text" name="username" class="form-control rounded-pill" placeholder="Masukkan username" required>
+                    <label for="login" class="form-label">
+                        <i class="bi bi-person-fill me-1"></i> Username
+                    </label>
+                    <input type="text" name="login" class="form-control rounded-pill" placeholder="Masukkan username" required>
                 </div>
+
                 <div class="mb-3">
-                    <label for="password" class="form-label">🔒 Password</label>
+                    <label for="password" class="form-label">
+                        <i class="bi bi-lock-fill me-1"></i> Password
+                    </label>
                     <input type="password" name="password" class="form-control rounded-pill" placeholder="Masukkan password" required>
                 </div>
+
                 <div class="form-check mb-3">
                     <input class="form-check-input" type="checkbox" name="remember" id="remember">
                     <label class="form-check-label" for="remember">Ingat saya</label>
                 </div>
+
                 <div class="d-grid">
-                    <button type="submit" class="btn btn-primary rounded-pill fw-semibold">Masuk</button>
+                    <button type="submit" class="btn btn-primary rounded-pill fw-semibold">Login</button>
                 </div>
             </form>
         </div>

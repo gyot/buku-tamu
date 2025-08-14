@@ -40,10 +40,6 @@ class BiodataTamuController extends Controller
 
         return view('biodata_tamus.index', compact('biodataTamus'));
     }
-
-
-
-
     /**
      * Menampilkan form untuk menambah biodata tamu.
      */
@@ -64,13 +60,16 @@ class BiodataTamuController extends Controller
 
         BiodataTamu::create($request->all());
 
-        return redirect()->route('biodata-tamus.index')->with('success', 'Biodata berhasil disimpan.');
+        return redirect()
+            ->route('biodata-tamus.index', ['page' => $request->input('page')])
+            ->with('success', 'Biodata berhasil disimpan.');
     }
 
     public function edit($id)
     {
         $biodata = BiodataTamu::with('bukuTamu')->findOrFail($id);
-        return view('biodata_tamus.edit', compact('biodata'));
+        $page = request('page');
+        return view('biodata_tamus.edit', compact('biodata', 'page'));
     }
 
     public function update(Request $request, $id)
@@ -84,8 +83,10 @@ class BiodataTamuController extends Controller
         $biodata = BiodataTamu::findOrFail($id);
         $biodata->update($request->all());
 
-        return redirect()->route('biodata-tamus.index')->with('success', 'Biodata berhasil diperbarui.');
+        return redirect()->route('biodata-tamus.index', ['page' => $request->input('page')])
+            ->with('success', 'Biodata berhasil diperbarui.');
     }
+
     /**
      * Menghapus biodata tamu dari database.
      */
@@ -94,6 +95,4 @@ class BiodataTamuController extends Controller
         $biodataTamu->delete();
         return redirect()->route('biodata-tamus.index')->with('success', 'Biodata tamu berhasil dihapus.');
     }
-    
-
 }

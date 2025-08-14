@@ -42,24 +42,35 @@ class BukuTamuController extends Controller
 
         return view('bukutamu.index', compact('bukuTamus'));
     }
-
-
-
-
     /**
      * Menampilkan form untuk menambah tamu baru.
      */
     public function create()
     {
+        $today = Carbon::today();
+        $yesterday = Carbon::yesterday();
+        $bulan_ini = Carbon::now();
+
         $statistik = [
-            'hari_ini' => BukuTamu::whereDate('tanggal', Carbon::today())->count(),
-            'kemarin' => BukuTamu::whereDate('tanggal', Carbon::yesterday())->count(),
-            'bulan_ini' => BukuTamu::whereMonth('tanggal', Carbon::now()->month)->count(),
-            'total' => BukuTamu::count()
+            'hari_ini' => [
+                'label' => $today->translatedFormat('d/m/Y'),
+                'jumlah' => BukuTamu::whereDate('tanggal', $today)->count(),
+            ],
+            'kemarin' => [
+                'label' => $yesterday->translatedFormat('d/m/Y'),
+                'jumlah' => BukuTamu::whereDate('tanggal', $yesterday)->count(),
+            ],
+            'bulan_ini' => [
+                'label' => $bulan_ini->translatedFormat('F Y'),
+                'jumlah' => BukuTamu::whereMonth('tanggal', $bulan_ini->month)
+                                    ->whereYear('tanggal', $bulan_ini->year)
+                                    ->count(),
+            ]
         ];
 
         return view('bukutamu.create', compact('statistik'));
     }
+
 
     /**
      * Menyimpan data tamu ke database.
@@ -69,13 +80,18 @@ class BukuTamuController extends Controller
         $request->validate([
             'nama' => 'required|string|max:255',
             'instansi' => 'nullable|string|max:255',
-            'keperluan' => 'required|string',
-            'no_hp' => 'nullable|numeric|digits_between:10,15'
+            'keperluan' => 'required|in:Layanan Data dan Informasi Mutu Pendidikan,Layanan Pemetaan dan Supervisi Mutu Pendidikan,Layanan Kemitraan Penjaminan Mutu Pendidikan,Layanan Sarana dan Prasarana,Kunjungan Kerja,Silaturahmi,Lainnya',
+            'no_hp' => 'nullable|numeric|digits_between:10,15',
+            'tanggal' => 'required|date'
+        ], [
+            'no_hp.numeric' => 'Nomor HP harus berupa angka.',
+            'no_hp.digits_between' => 'Nomor HP harus terdiri dari 10 sampai 15 digit.'
         ]);
 
         BukuTamu::create($request->all());
 
-        return redirect()->route('buku-tamus.create')->with('success', 'Data tamu berhasil ditambahkan.');
+        // return redirect()->route('buku-tamus.create')->with('success', 'Data tamu berhasil ditambahkan.');
+        return redirect()->route('buku-tamus.terimakasih');
     }
 
     /**
@@ -91,7 +107,8 @@ class BukuTamuController extends Controller
      */
     public function edit(BukuTamu $bukuTamu)
     {
-        return view('bukutamu.edit', compact('bukuTamu'));
+        $page = request('page');
+        return view('bukutamu.edit', compact('bukuTamu', 'page'));
     }
 
     /**
@@ -102,14 +119,17 @@ class BukuTamuController extends Controller
         $request->validate([
             'nama' => 'required|string|max:255',
             'instansi' => 'nullable|string|max:255',
-            'keperluan' => 'required|string',
-            'no_hp' => 'nullable|string|max:20',
-            'tanggal' => 'required|date',
+            'keperluan' => 'required|in:Layanan Data dan Informasi Mutu Pendidikan,Layanan Pemetaan dan Supervisi Mutu Pendidikan,Layanan Kemitraan Penjaminan Mutu Pendidikan,Layanan Sarana dan Prasarana,Kunjungan Kerja,Silaturahmi,Lainnya',
+            'no_hp' => 'nullable|numeric|digits_between:10,15'
+        ], [
+            'no_hp.numeric' => 'Nomor HP harus berupa angka.',
+            'no_hp.digits_between' => 'Nomor HP harus terdiri dari 10 sampai 15 digit.'
         ]);
 
         $bukuTamu->update($request->all());
 
-        return redirect()->route('buku-tamus.index')->with('success', 'Data tamu berhasil diperbarui.');
+        return redirect()->route('buku-tamus.index', ['page' => $request->input('page')])
+            ->with('success', 'Data tamu berhasil diperbarui.');
     }
 
     /**

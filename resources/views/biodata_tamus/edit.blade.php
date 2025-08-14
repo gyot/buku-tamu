@@ -2,11 +2,13 @@
 
 @section('content')
 <div class="container">
-    <h1 class="mb-4">Edit Biodata Tamu</h1>
+    <h1 class="mb-4">Edit Layanan Tamu</h1>
 
     <form action="{{ route('biodata-tamus.update', $biodata->id) }}" method="POST">
         @csrf
         @method('PUT')
+
+        <input type="hidden" name="page" value="{{ request('page') }}">
 
         <div class="mb-3">
             <label class="form-label">Nama Tamu</label>
@@ -24,7 +26,7 @@
         </div>
 
         <div class="mb-3">
-            <label class="form-label">No HP</label>
+            <label class="form-label">Nomor HP</label>
             <input type="text" class="form-control" value="{{ $biodata->bukuTamu->no_hp }}" disabled>
         </div>
 

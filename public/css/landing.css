@@ -1,60 +1,118 @@
-/* landing.css */
-
 body {
     font-family: "Poppins", sans-serif;
     background-color: #f5f9fc;
+    margin: 0;
+    padding: 0;
 }
 
-.landing-hero {
+/* Hero Section */
+.hero-section {
     background: linear-gradient(to bottom, #e0f0ff, #ffffff);
-    padding: 60px 20px;
-    text-align: center;
-    animation: fadeIn 1s ease-in;
+    padding: 80px 0;
+    width: 100vw;
+    overflow-x: hidden;
 }
 
-.landing-hero img {
-    width: 120px;
-    margin-bottom: 20px;
+.container-hero {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+    padding: 0 30px;
+    flex-wrap: wrap;
 }
 
-.landing-hero h1 {
-    font-size: 2.5rem;
+.hero-text {
+    flex: 1;
+    text-align: left;
+}
+
+.hero-text h1 {
+    font-size: 2.8rem;
     color: #004085;
     font-weight: bold;
 }
 
-.landing-hero p {
+.hero-text p {
     font-size: 1.2rem;
     color: #333;
-    margin-bottom: 30px;
 }
 
+.hero-text .small-text {
+    font-size: 0.95rem;
+    margin-top: 10px;
+    color: #555;
+}
+
+.hero-image {
+    flex: 1;
+    text-align: center;
+}
+
+.hero-image img {
+    width: 100%;
+    max-width: 800px;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Button */
 .btn-isi {
     font-size: 1.1rem;
     padding: 12px 30px;
     border-radius: 50px;
+    margin-top: 20px;
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+/* Section Titles */
+.section-title {
+    font-weight: 700;
+    font-size: 1.8rem;
+    color: #064089;
+    margin: 50px 0 30px;
 }
 
-/* Slider */
-.carousel-inner img {
-    max-height: 500px;
-    object-fit: cover;
+/* Step Cards */
+.step-number {
+    font-size: 2.5rem;
+    color: #064089;
+    font-weight: bold;
+}
+
+.step-title {
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+.step-desc {
+    font-size: 0.95rem;
+    color: #555;
 }
 
 /* Footer */
-.footer {
-    font-size: 14px;
-    color: #777;
-    background-color: #004085;
+.footer-custom {
+    background-color: #07326a;
+    padding: 40px 30px;
+    width: 100vw;
+    margin-top: 60px;
+    color: white;
+}
+
+.footer-custom .sosmed-icons a {
+    font-size: 1.5rem;
+    color: white;
+    margin-right: 15px;
+    transition: color 0.3s ease;
+}
+
+.footer-custom .sosmed-icons a:hover {
+    color: #ffc107;
+}
+
+.footer-custom iframe {
+    width: 100%;
+    border-radius: 8px;
+    margin-top: 10px;
 }

@@ -13,23 +13,24 @@ class AuthController extends Controller
     }
 
     public function login(Request $request)
-{
-    $credentials = $request->validate([
-        'username' => 'required|string',
-        'password' => 'required|string',
-    ]);
+    {
+        $request->validate([
+            'login' => 'required|string',
+            'password' => 'required|string',
+        ]);
 
-    if (Auth::attempt(['username' => $request->username, 'password' => $request->password])) {
-        return redirect()->route('dashboard')->with('success', 'Login berhasil');
+        $loginType = filter_var($request->login, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+
+        if (Auth::attempt([$loginType => $request->login, 'password' => $request->password], $request->remember)) {
+            return redirect()->route('admin.dashboard')->with('success', 'Login berhasil');
+        }
+
+        return back()->withErrors(['loginError' => 'Email/Username atau password salah']);
     }
-
-    return back()->withErrors(['loginError' => 'Username atau password salah']);
-}
-
 
     public function logout(Request $request)
     {
         Auth::logout();
-        return redirect()->route('buku-tamus.create');
+        return redirect()->route('login');
     }
 }

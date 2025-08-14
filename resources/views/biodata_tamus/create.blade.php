@@ -2,13 +2,15 @@
 
 @section('content')
 <div class="container">
-    <h1 class="mb-4">Tambah Biodata Tamu</h1>
+    <h1 class="mb-4">Tambah Layanan Tamu</h1>
 
     <form action="{{ route('biodata-tamus.store') }}" method="POST">
         @csrf
 
         {{-- Hidden input untuk ID tamu --}}
         <input type="hidden" name="buku_tamu_id" value="{{ $bukuTamu->id }}">
+
+        <input type="hidden" name="page" value="{{ request('page') }}">
 
         {{-- Informasi tamu yang ditampilkan (non-editable) --}}
         <div class="mb-3">
@@ -27,7 +29,7 @@
         </div>
 
         <div class="mb-3">
-            <label class="form-label">No HP</label>
+            <label class="form-label">Nomor HP</label>
             <input type="text" class="form-control" value="{{ $bukuTamu->no_hp }}" disabled>
         </div>
 

@@ -1,45 +1,51 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LandingController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\BukuTamuController;
 use App\Http\Controllers\BiodataTamuController;
 use App\Http\Controllers\RekapanTamuController;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\SaranaInfoController;
 
-// =======================
-// Landing Page (Public)
-// =======================
-Route::get('/', function () {
-    return view('landing'); // file: resources/views/landing.blade.php
-})->name('landing');
+/*
+|--------------------------------------------------------------------------
+| Public Routes
+|--------------------------------------------------------------------------
+*/
 
-// =======================
-// Form Buku Tamu (Public)
-// =======================
+// Landing Page
+Route::get('/', [LandingController::class, 'index'])->name('landing');
+
+// Form Buku Tamu
 Route::get('/buku-tamu', [BukuTamuController::class, 'create'])->name('buku-tamus.create');
 Route::post('/buku-tamu', [BukuTamuController::class, 'store'])->name('buku-tamus.store');
 
-// =======================
+Route::view('/buku-tamu/terimakasih', 'bukutamu.terimakasih')->name('buku-tamus.terimakasih');
+
 // Login Admin / Operator
-// =======================
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// =======================
-// Admin Area (Protected)
-// =======================
+/*
+|--------------------------------------------------------------------------
+| Admin Routes (Protected by Auth Middleware)
+|--------------------------------------------------------------------------
+*/
+
 Route::middleware('auth')->group(function () {
 
     // Dashboard Admin
-    // Route::get('/dashboard', [BukuTamuController::class, 'index'])->name('dashboard');
-    Route::get('/admin/dashboard', [DashboardController::class, 'index'])->middleware('auth')->name('dashboard');
+    Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
-    // Buku Tamu - Data (tanpa create & store karena sudah di luar middleware)
+    // Informasi Sarana & Prasarana
+    Route::resource('sarana-infos', SaranaInfoController::class);
+
+    // Buku Tamu (tanpa create & store karena sudah diatur di public)
     Route::resource('buku-tamus', BukuTamuController::class)->except(['create', 'store']);
     Route::get('/buku-tamus', [BukuTamuController::class, 'index'])->name('buku-tamus.index');
-
 
     // Biodata Tamu
     Route::get('/biodata-tamus', [BiodataTamuController::class, 'index'])->name('biodata-tamus.index');
@@ -51,4 +57,5 @@ Route::middleware('auth')->group(function () {
     // Rekapan Tamu
     Route::get('/rekapan', [RekapanTamuController::class, 'index'])->name('rekapan.index');
     Route::post('/rekapan/export', [RekapanTamuController::class, 'export'])->name('rekapan.export');
+    Route::post('/rekapan/export-pdf', [RekapanTamuController::class, 'exportPdf'])->name('rekapan.exportPdf');
 });
